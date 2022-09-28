@@ -21,8 +21,8 @@ const userSchema = (sequelize, DataTypes) => {
   });
 
   model.beforeCreate(async (user) => {
-    let hashedPass = await bcrypt.hash(user.password, 10);
-    user.password = hashedPass;
+    let hashedPassword = await bcrypt.hash(user.password, 10);
+    user.password = hashedPassword;
   });
 
   // Basic AUTH: Validating strings (username, password) 
@@ -36,12 +36,12 @@ const userSchema = (sequelize, DataTypes) => {
   // Bearer AUTH: Validating a token
   model.authenticateToken = async function (token) {
     try {
-      const parsedToken = await jwt.verify(token, process.env.SECRET);
+      const parsedToken = jwt.verify(token, process.env.SECRET);
       const user = await this.findOne({ username: parsedToken.username });
       if (user) { return user; }
       throw new Error('User Not Found');
-    } catch (e) {
-      throw new Error(e.message);
+    } catch (err) {
+      throw new Error(err.message);
     }
   };
 

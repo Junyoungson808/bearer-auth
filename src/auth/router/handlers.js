@@ -10,9 +10,9 @@ async function handleSignup(req, res, next) {
       token: userRecord.token,
     };
     res.status(201).json(output);
-  } catch (e) {
-    console.error(e);
-    next(e);
+  } catch (err) {
+    console.error(err);
+    next(err);
   }
 }
 
@@ -23,9 +23,9 @@ async function handleSignin(req, res, next) {
       token: req.user.token,
     };
     res.status(200).json(user);
-  } catch (e) {
-    console.error(e);
-    next(e);
+  } catch (err) {
+    console.error(err);
+    next(err);
   }
 }
 
@@ -34,9 +34,9 @@ async function handleGetUsers(req, res, next) {
     const userRecords = await users.findAll({});
     const list = userRecords.map(user => user.username);
     res.status(200).json(list);
-  } catch (e) {
-    console.error(e);
-    next(e);
+  } catch (err) {
+    console.error(err);
+    next(err);
   }
 }
 
