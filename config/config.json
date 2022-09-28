@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "root",
+    "username": "json",
     "password": null,
-    "database": "database_development",
+    "database": "api-app",
     "host": "127.0.0.1",
     "dialect": "postres"
   },

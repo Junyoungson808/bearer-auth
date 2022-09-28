@@ -1,9 +1,9 @@
 'use strict';
 
-process.env.SECRET = "TEST_SECRET";
+process.env.SECRET = 'TEST_SECRET';
 
-const bearer = require('../../../../src/auth/middleware/bearer.js');
-const { db, users } = require('../../../../src/auth/models/index.js');
+const bearer = require('../../src/auth/middleware/bearer.js');
+const { db, users } = require('../../src/auth/models/index.js');
 const jwt = require('jsonwebtoken');
 
 let userInfo = {
@@ -27,26 +27,24 @@ describe('Auth Middleware', () => {
     status: jest.fn(() => res),
     send: jest.fn(() => res),
     json: jest.fn(() => res),
-  }
+  };
   const next = jest.fn();
 
   describe('user authentication', () => {
 
-    it('fails a login for a user (admin) with an incorrect token', () => {
+    it('fails a login for a user (admin) with an incorrect token', async () => {
 
       req.headers = {
         authorization: 'Bearer thisisabadtoken',
       };
 
-      return bearer(req, res, next)
-        .then(() => {
-          expect(next).not.toHaveBeenCalled();
-          expect(res.status).toHaveBeenCalledWith(403);
-        });
+      await bearer(req, res, next);
+      expect(next).not.toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(403);
 
     });
 
-    it('logs in a user with a proper token', () => {
+    it('logs in a user with a proper token', async () => {
 
       const user = { username: 'admin' };
       const token = jwt.sign(user, process.env.SECRET);
@@ -55,10 +53,8 @@ describe('Auth Middleware', () => {
         authorization: `Bearer ${token}`,
       };
 
-      return bearer(req, res, next)
-        .then(() => {
-          expect(next).toHaveBeenCalledWith();
-        });
+      await bearer(req, res, next);
+      expect(next).toHaveBeenCalledWith();
 
     });
   });

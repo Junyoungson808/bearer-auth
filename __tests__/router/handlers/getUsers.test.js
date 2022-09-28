@@ -1,9 +1,9 @@
 'use strict';
 
-process.env.SECRET = "TEST_SECRET";
+process.env.SECRET = 'TEST_SECRET';
 
-const { db, } = require('../../../../../src/auth/models');
-const { handleGetUsers } = require('../../../../../src/auth/router/handlers.js');
+const { db } = require('../../../src/auth/models');
+const { handleGetUsers } = require('../../../src/auth/router/handlers.js');
 
 beforeAll(async () => {
   await db.sync();
@@ -19,7 +19,7 @@ describe('Router handler for getUsers', () => {
     send: jest.fn(() => res),
     status: jest.fn(() => res),
     json: jest.fn(() => res),
-  }
+  };
   const next = jest.fn();
 
   test('Should fetch users and send user objects in the response', async () => {

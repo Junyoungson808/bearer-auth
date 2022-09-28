@@ -1,9 +1,9 @@
 'use strict';
 
-process.env.SECRET = "TEST_SECRET";
+process.env.SECRET = 'TEST_SECRET';
 
-const { db, users } = require('../../../../../src/auth/models');
-const { handleSignin } = require('../../../../../src/auth/router/handlers.js');
+const { db, users } = require('../../../src/auth/models');
+const { handleSignin } = require('../../../src/auth/router/handlers.js');
 
 beforeAll(async () => {
   await db.sync();
@@ -25,7 +25,7 @@ describe('Testing the signin handler', () => {
   test('Should find a User when a `user` is present on the request', async () => {
     let req = {
       user: await users.findOne({ where: { username: 'test' } }),
-    }
+    };
 
     await handleSignin(req, res, next);
     expect(res.status).toHaveBeenCalledWith(200);
@@ -37,7 +37,7 @@ describe('Testing the signin handler', () => {
           token: expect.any(String),
         }),
         token: expect.any(String),
-      })
+      }),
     );
   });
 
