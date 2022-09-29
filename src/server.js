@@ -8,8 +8,7 @@ const morgan = require('morgan');
 // Esoteric Resources
 const errorHandler = require('./error-handlers/500.js');
 const notFound = require('./error-handlers/404.js');
-const authRouter = require('./auth/router/index.js');
-const PORT = process.env.PORT || 3002;
+const authRoutes = require('./auth/router/index.js');
 
 // Prepare the express app
 const app = express();
@@ -22,7 +21,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use(authRouter);
+app.use(authRoutes);
 
 // Catchalls
 app.use(notFound);
@@ -30,9 +29,9 @@ app.use(errorHandler);
 
 module.exports = {
   server: app,
-  start: () => {
-    app.listen(PORT, () => {
-      console.log(`Server Up on ${PORT}`);
+  start: (port) => {
+    app.listen(port, () => {
+      console.log(`Server Up on ${port}`);
     });
   },
 };

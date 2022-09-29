@@ -4,5 +4,5 @@
 
 module.exports = {
   testEnvironment: 'node',
-  roots: ['./__tests__'],
+  roots: ['./__tests__/src/'],
 };
