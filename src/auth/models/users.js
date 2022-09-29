@@ -1,9 +1,9 @@
 'use strict';
 
-require('dotenv').config();
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const SECRET = process.env.SECRET || 'TEST_SECRET';
+const jwt = require('jsonwebtoken');
+const SECRET = 'TEST_SECRET';
+require('dotenv');
 
 const userSchema = (sequelize, DataTypes) => {
   const model = sequelize.define('User', {
@@ -12,36 +12,34 @@ const userSchema = (sequelize, DataTypes) => {
     token: {
       type: DataTypes.VIRTUAL,
       get() {
-        return jwt.sign({ username: this.username }, SECRET, { expiresIn: '3000000'});
-      },
-      set(payload){
-        return jwt.sign(payload, SECRET);
+        return jwt.sign({ username: this.username }, SECRET, {expiresIn: 9000000});
       },
     },
   });
 
   model.beforeCreate(async (user) => {
-    let hashedPassword = await bcrypt.hash(user.password, 10);
-    user.password = hashedPassword;
+    let hashedPass = await bcrypt.hash(user.password, 10);
+    user.password = hashedPass;
   });
 
   // Basic AUTH: Validating strings (username, password) 
   model.authenticateBasic = async function (username, password) {
-    const user = await this.findOne({ username });
+    const user = await this.findOne({ where: { username } });
     const valid = await bcrypt.compare(password, user.password);
     if (valid) { return user; }
     throw new Error('Invalid User');
   };
 
   // Bearer AUTH: Validating a token
-  model.authenticateToken = async function (token) {
+  model.authenticateWithToken = async function (token) {
     try {
       const parsedToken = jwt.verify(token, process.env.SECRET);
-      const user = await this.findOne({ username: parsedToken.username });
+      const user = await this.findOne({where: {username: parsedToken.username }});
       if (user) { return user; }
       throw new Error('User Not Found');
-    } catch (err) {
-      throw new Error(err.message);
+    } catch (e) {
+      throw new Error(e.message);
+      
     }
   };
 

@@ -1,6 +1,7 @@
 'use strict';
 
 const { users } = require('../models/index.js');
+const userSchema = require('../models/users.js');
 
 async function handleSignup(req, res, next) {
   try {
@@ -10,9 +11,9 @@ async function handleSignup(req, res, next) {
       token: userRecord.token,
     };
     res.status(201).json(output);
-  } catch (err) {
-    console.error(err);
-    next(err);
+  } catch (e) {
+    console.error(e);
+    next(e);
   }
 }
 
@@ -23,25 +24,25 @@ async function handleSignin(req, res, next) {
       token: req.user.token,
     };
     res.status(200).json(user);
-  } catch (err) {
-    console.error(err);
-    next(err);
+  } catch (e) {
+    console.error(e);
+    next(e);
   }
 }
 
 async function handleGetUsers(req, res, next) {
   try {
     const userRecords = await users.findAll({});
-    const list = userRecords.map(user => user.username);
+    const list = userRecords.map(user => users.username);
     res.status(200).json(list);
-  } catch (err) {
-    console.error(err);
-    next(err);
+  } catch (e) {
+    console.error(e);
+    next(e);
   }
 }
 
 function handleSecret(req, res, next) {
-  res.status(200).text('Welcome to the secret area!');
+  res.status(200).send('Welcome to the secret area!');
 }
 
 module.exports = {
